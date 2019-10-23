@@ -16,11 +16,6 @@ router.get('/', (req, res) => {
   res.redirect('books');
 });
 
-router.post('/', (req, res) => {
-  console.log(req.body);
-  // res.redirect('/books')
-});
-
 router.get('/books', asyncHandler(async (req, res) => {
   const books = await Book.findAll({ order: [[ "Title", "ASC"]] });
   res.render('index', {
@@ -49,12 +44,15 @@ router.get('/books/:id', asyncHandler(async (req, res) => {
     heading: 'Update Book',
     buttonValue: 'Update Book',
     returnButton: false,
+    value: true,
     bookAttrs,
     book
   });
 }));
 
-
-
+router.post('/', asyncHandler(async (req, res) => {
+  const book = await Book.create(req.body);
+  res.redirect('/books');
+}));
 
 module.exports = router;

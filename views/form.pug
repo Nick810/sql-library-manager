@@ -1,16 +1,16 @@
 form(action='/' method='post')
   p
     label(for=bookAttrs.title.fieldName) #{bookAttrs.title.fieldName.toUpperCase()}
-    input(for=bookAttrs.title.fieldName type="text" id=bookAttrs.title.fieldName value=(value ? book.dataValues.title : null))
+    input(for=bookAttrs.title.fieldName type="text" id=bookAttrs.title.fieldName name="title" value=(value ? book.dataValues.title : null))
   p
     label(for=bookAttrs.author.fieldName) #{bookAttrs.author.fieldName.toUpperCase()}
-    input(for=bookAttrs.author.fieldName type="text" id=bookAttrs.author.fieldName value=(value ? book.dataValues.author : null))
+    input(for=bookAttrs.author.fieldName type="text" id=bookAttrs.author.fieldName name="author" value=(value ? book.dataValues.author : null))
   p
     label(for=bookAttrs.genre.fieldName) #{bookAttrs.genre.fieldName.toUpperCase()}
-    input(for=bookAttrs.genre.fieldName type="text" id=bookAttrs.genre.fieldName value=(value ? book.dataValues.genre : null))
+    input(for=bookAttrs.genre.fieldName type="text" id=bookAttrs.genre.fieldName name="genre" value=(value ? book.dataValues.genre : null))
   p
     label(for=bookAttrs.year.fieldName) #{bookAttrs.year.fieldName.toUpperCase()}
-    input(for=bookAttrs.year.fieldName type="text" id=bookAttrs.year.fieldName value=(value ? book.dataValues.year : null))
+    input(for=bookAttrs.year.fieldName type="text" id=bookAttrs.year.fieldName name="year" maxlength="4" value=(value ? book.dataValues.year : null))
   p
     input(type='submit' value=buttonValue)
   if (returnButton === true)
