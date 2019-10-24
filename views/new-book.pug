@@ -1,5 +1,6 @@
 extends layout.pug
 
-block content    
-  include form
-      
+block content
+  form(action='/books/new' method='post') 
+    include form
+    

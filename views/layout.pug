@@ -7,6 +7,10 @@ html(lang='en')
     title= title
     link(rel='stylesheet', href='/static/stylesheets/style.css')
   body
-    h1= heading
+    .header-container
+      h1= heading
+      .search-container
+        input
+        input(type='submit' id='search')
     block content
     
