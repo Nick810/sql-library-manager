@@ -10,7 +10,9 @@ html(lang='en')
     .header-container
       h1= heading
       .search-container
-        input
-        input(type='submit' id='search')
+        form(action='/books/search/')
+          input(type="search" for="search" name="search" placeholder="title, author, etc...")
+          input(type='submit' id='search')
     block content
+    script(src='/static/js/main.js')
     

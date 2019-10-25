@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 function asyncHandler(cb) {
   return async(req, res, next) => {
@@ -14,24 +16,28 @@ function asyncHandler(cb) {
 
 function appendPageLinks(arr, itemsPerPage) {
   const totalPage = Math.ceil(arr.length / itemsPerPage);
-  return totalPage
+  return totalPage;
 }
 
 router.get('/', (req, res) => {
-  res.redirect('books');
+  res.redirect('books/page/1');
 });
 
-router.get('/books', asyncHandler(async (req, res) => {
-  const books = await Book.findAll({ order: [[ "Title", "ASC"]] });
-  console.log(books.length);
+//
+router.get('/books/page/:id', asyncHandler(async (req, res) => {
+  const booksList = await Book.findAll();
+  const books = await Book.findAll({ offset: (req.params.id - 1) * 10,
+                                      limit: 10,
+                                      order: [[ "Title", "ASC" ]]});
   res.render('index', {
     title: 'Books',
     heading: 'Books',
-    totalPage: appendPageLinks(books, 10),
+    totalPage: appendPageLinks(booksList, 10),
     books
   });
 }));
 
+//
 router.get('/books/new', asyncHandler(async (req, res) => {
   const bookAttrs = await Book.rawAttributes
   res.render('new-book', {
@@ -43,10 +49,38 @@ router.get('/books/new', asyncHandler(async (req, res) => {
   });
 }));
 
+router.get('/books/search/', asyncHandler(async (req, res) => {
+  const searchQuery = req.query.search;
+  // console.log(searchQuery)
+  const books = await Book.findAll({
+                        where: {
+                          title: {
+                            [Op.startsWith]: searchQuery
+                          },
+                          // author: {
+                          //   [Op.like]: searchQuery
+                          // },
+                          // genre: {
+                          //   [Op.like]: searchQuery
+                          // },
+                          // year: {
+                          //   [Op.like]: searchQuery
+                          // },
+                        }
+                      })
+  console.log(books)
+  res.render('search', {
+    title: 'Search',
+    heading: 'Search',
+
+    books
+  });
+}));
+
 // Post new book to the database
 router.post('/books/new', asyncHandler(async (req, res) => {
   const book = await Book.create(req.body);
-  res.redirect('/books');
+  res.redirect('/books/page/1');
 }));
 
 router.get('/books/:id', asyncHandler(async (req, res) => {
@@ -65,17 +99,16 @@ router.get('/books/:id', asyncHandler(async (req, res) => {
 
 // Update book in the database
 router.post('/books/:id', asyncHandler(async (req, res) => {
-  await console.log(req.body)
   const book = await Book.findByPk(req.params.id);
   await book.update(req.body);
-  res.redirect('/books');
+  res.redirect('/books/page/1');
 }));
 
 // Delete book in the database
 router.post('/books/:id/delete', asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
   await book.destroy();
-  res.redirect('/books');
+  res.redirect('/books/page/1');
 }));
 
 module.exports = router;
