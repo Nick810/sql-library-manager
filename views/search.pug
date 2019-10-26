@@ -24,3 +24,5 @@ block content
       while num < totalPage + 1
         li(class='pagination-links' onclick='checkActiveLinks(this)')
           a(href='/books/page/' + num)= num++
+  p
+    a(class='button' href='/') Back

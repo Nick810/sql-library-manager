@@ -49,30 +49,46 @@ router.get('/books/new', asyncHandler(async (req, res) => {
   });
 }));
 
+// Search for books in database
 router.get('/books/search/', asyncHandler(async (req, res) => {
   const searchQuery = req.query.search;
-  // console.log(searchQuery)
-  const books = await Book.findAll({
-                        where: {
+  let books;
+
+  if (/\d+/.test(searchQuery) === true) {
+    books = await Book.findAll({
+                    where: {
+                      year: {
+                        [Op.substring]: searchQuery
+                      }
+                    }
+                  });
+  } else {
+    books = await Book.findAll({
+                    where: {
+                      [Op.or]: [
+                        {
                           title: {
-                            [Op.startsWith]: searchQuery
-                          },
-                          // author: {
-                          //   [Op.like]: searchQuery
-                          // },
-                          // genre: {
-                          //   [Op.like]: searchQuery
-                          // },
-                          // year: {
-                          //   [Op.like]: searchQuery
-                          // },
-                        }
-                      })
-  console.log(books)
+                            [Op.substring]: searchQuery
+                          }
+                        },
+                        {
+                          author: {
+                            [Op.substring]: searchQuery
+                          }
+                        },
+                        {
+                          genre: {
+                            [Op.substring]: searchQuery
+                          }
+                        },
+                      ]
+                    }
+                  });
+  }
+
   res.render('search', {
     title: 'Search',
     heading: 'Search',
-
     books
   });
 }));
