@@ -55,7 +55,6 @@ router.get('/books/new', asyncHandler(async (req, res) => {
 // Search for books in database
 router.get('/books/', asyncHandler(async (req, res) => {
   const searchQuery = req.query.search;
-  console.log(req.params)
   let books;
 
   if (/\d+/.test(searchQuery) === true) {
@@ -95,7 +94,7 @@ router.get('/books/', asyncHandler(async (req, res) => {
   res.render('search', {
     title: 'Search',
     heading: 'Search',
-    totalPage: appendPageLinks(books, 10),
+    // totalPage: appendPageLinks(books, 10),
     searchQuery,
     books
   });
