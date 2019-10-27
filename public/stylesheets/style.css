@@ -11,14 +11,15 @@ a {
 }
 
   a:hover {
-    color: black;
+    color: white;
+    background-color: #00c397;
   }
 
 a.button, input[type=submit] {
   color: white;
   background: #019875;
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
-  padding: 10px 14px 12px;
+  padding: 12px 14px 12px;
   font-size: 14px;
   border-radius: 2px;
   cursor: pointer;
@@ -31,6 +32,11 @@ form a.button, input[type=submit] {
 
 input[type=submit] {
   border: 0;
+}
+
+input[type=search] {
+  border: 2px solid #019875;
+  transform: translateX(2px);
 }
 
   a.button:hover, input[type=submit]:hover {
@@ -51,6 +57,10 @@ ul {
 h2 {
   border-top: 2px solid #e7e7e7;
   padding-top: 20px;
+}
+
+h3 {
+  margin-top: 2em;
 }
 
 table {
@@ -123,17 +133,15 @@ input[type=text] {
 }
 
 .pagination-links {
-  background-color: white;
   padding: .5em .75em;
   margin: 0 0.25em;
-  display: inline;
   border: 2px solid #019875;
   border-radius: 5px;
-  cursor: pointer;
 }
 
 .active {
   background-color: #00c397;
+  color: #fff;
 }
 
 #search {

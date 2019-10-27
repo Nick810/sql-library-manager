@@ -3,27 +3,29 @@ extends layout.pug
 block content
   p
     a(class='button' href='/books/new') Create New Book
-  table
-    thead
-      tr
-        th Title
-        th Author
-        th Genre
-        th Year
-    tbody
-      each book in books
+    
+  if books.length === 0
+    h3 Sorry, no search results found. Please try again.
+  else 
+    table.table-container
+      thead
         tr
-          td
-            a(href='/books/' + book.dataValues.id)= book.dataValues.title
-          td= book.dataValues.author
-          td= book.dataValues.genre
-          td= book.dataValues.year
+          th Title
+          th Author
+          th Genre
+          th Year
+      tbody
+        each book in books
+          tr
+            td
+              a(href='/books/' + book.dataValues.id)= book.dataValues.title
+            td= book.dataValues.author
+            td= book.dataValues.genre
+            td= book.dataValues.year
           
-  - let num = 1;
+  - let index = 1;
   div.pagination-container
-    ul(class='pagination')
-      while num < totalPage + 1
-        li(class='pagination-links')
-          a(href='/books/?search=' + searchQuery)= num++
+    while index < totalPage + 1
+        a(href='/books/?search=' + searchQuery).pagination-links= index++
   p
-    a(class='button table-button' href='/') Back
+    a(class='button table-button' href='/') Home

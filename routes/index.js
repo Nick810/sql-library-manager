@@ -23,23 +23,32 @@ router.get('/', (req, res) => {
   res.redirect('books/page/1');
 });
 
-//
-router.get('/books/page/:id', asyncHandler(async (req, res) => {
+// Main page
+router.get('/books/page/:id', asyncHandler(async (req, res, next) => {
   const booksList = await Book.findAll();
+  const totalPage = appendPageLinks(booksList, 10);
   const books = await Book.findAll({ offset: (req.params.id - 1) * 10,
                                      limit: 10,
                                      order: [[ "Title", "ASC" ]]
                                   });
-  res.render('index', {
-    title: 'Books',
-    heading: 'Books',
-    totalPage: appendPageLinks(booksList, 10),
-    // pageNumber: req.params.id,
-    books
-  });
+
+  if (parseInt(req.params.id) > totalPage) {
+    const err = new Error;
+    err.status = 404;
+    err.message = 'Sorry! We couldn\'t find the page you were looking for';
+    next(err);
+    console.error('Error: Sorry! We couldn\'t find the page you were looking for');
+  } else {
+    res.render('index', {
+      title: 'Books',
+      heading: 'Books',
+      totalPage: totalPage,
+      books
+    });
+  }
 }));
 
-//
+// Add new books to the database
 router.get('/books/new', asyncHandler(async (req, res) => {
   const bookAttrs = await Book.rawAttributes
   res.render('new-book', {
@@ -51,8 +60,7 @@ router.get('/books/new', asyncHandler(async (req, res) => {
   });
 }));
 
-
-// Search for books in database
+// Search for books in the database
 router.get('/books/', asyncHandler(async (req, res) => {
   const searchQuery = req.query.search;
   let books;
@@ -127,6 +135,7 @@ router.post('/books/new', asyncHandler(async (req, res) => {
   }
 }));
 
+// Open book by parameters id
 router.get('/books/:id', asyncHandler(async (req, res) => {
   const bookAttrs = await Book.rawAttributes;
   const book = await Book.findByPk(req.params.id);
@@ -164,6 +173,8 @@ router.post('/books/:id', asyncHandler(async (req, res) => {
         bookAttrs,
         book
       });
+    } else {
+      throw error;
     }
   }
 }));

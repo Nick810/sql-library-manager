@@ -18,9 +18,8 @@ block content
           td= book.dataValues.author
           td= book.dataValues.genre
           td= book.dataValues.year
+          
   - let index = 1;
   div.pagination-container
-    ul(class='pagination')
-      while index < totalPage + 1
-        li(class='pagination-links')
-          a(href='/books/page/' + index)= index++
+    while index < totalPage + 1
+        a(href='/books/page/' + index).pagination-links= index++
