@@ -96,6 +96,10 @@ input[type=text] {
   color: rgb(236, 15, 15);
 }
 
+.main-container {
+  
+}
+
 .header-container {
   display: flex;
   flex-direction: row;
