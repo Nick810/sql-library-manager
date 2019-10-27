@@ -53,6 +53,10 @@ h2 {
   padding-top: 20px;
 }
 
+table {
+  margin: 2em 0;
+}
+
 th {
   border-bottom: 2px solid #D8B493;
   text-align: left;
@@ -97,7 +101,9 @@ input[type=text] {
 }
 
 .main-container {
-  
+  max-width: 700px;
+  margin: auto;
+  overflow-x: auto;
 }
 
 .header-container {
@@ -107,8 +113,7 @@ input[type=text] {
 }
 
 .search-container {
-  margin: auto;
-  margin-right: 3em;
+  margin: auto 0;
 }
 
 .pagination-container {

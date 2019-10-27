@@ -2,8 +2,8 @@ extends layout.pug
 
 block content
   p
-    a(class='button' href='/books/new') Create New Book
-  table
+    a(class='button table-button' href='/books/new') Create New Book
+  table.table-container
     thead
       tr
         th Title
@@ -18,9 +18,9 @@ block content
           td= book.dataValues.author
           td= book.dataValues.genre
           td= book.dataValues.year
-  - let num = 1;
+  - let index = 1;
   div.pagination-container
     ul(class='pagination')
-      while num < totalPage + 1
-        li(class='pagination-links' onclick='checkActiveLinks(this)')
-          a(href='/books/page/' + num)= num++
+      while index < totalPage + 1
+        li(class='pagination-links')
+          a(href='/books/page/' + index)= index++

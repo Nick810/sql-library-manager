@@ -18,11 +18,12 @@ block content
           td= book.dataValues.author
           td= book.dataValues.genre
           td= book.dataValues.year
+          
   - let num = 1;
   div.pagination-container
     ul(class='pagination')
       while num < totalPage + 1
-        li(class='pagination-links' onclick='checkActiveLinks(this)')
-          a(href='/books/page/' + num)= num++
+        li(class='pagination-links')
+          a(href='/books/?search=' + searchQuery)= num++
   p
-    a(class='button' href='/') Back
+    a(class='button table-button' href='/') Back

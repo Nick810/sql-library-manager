@@ -7,12 +7,14 @@ html(lang='en')
     title= title
     link(rel='stylesheet', href='/static/stylesheets/style.css')
   body
-    .header-container
-      h1= heading
-      .search-container
-        form(action='/books/search/')
-          input(type="search" for="search" name="search" placeholder="title, author, etc...")
-          input(type='submit' id='search')
-    block content
+    .main-container
+      .header-container
+        h1= heading
+        .search-container
+          form(action='/books/page/' + pageNumber)
+            input(type="search" for="search" name="search" placeholder="title, author, etc...")
+            input(type='submit' id='search')
+      block content
+        
     script(src='/static/js/main.js')
     

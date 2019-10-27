@@ -27,12 +27,14 @@ router.get('/', (req, res) => {
 router.get('/books/page/:id', asyncHandler(async (req, res) => {
   const booksList = await Book.findAll();
   const books = await Book.findAll({ offset: (req.params.id - 1) * 10,
-                                      limit: 10,
-                                      order: [[ "Title", "ASC" ]]});
+                                     limit: 10,
+                                     order: [[ "Title", "ASC" ]]
+                                  });
   res.render('index', {
     title: 'Books',
     heading: 'Books',
     totalPage: appendPageLinks(booksList, 10),
+    // pageNumber: req.params.id,
     books
   });
 }));
@@ -49,13 +51,16 @@ router.get('/books/new', asyncHandler(async (req, res) => {
   });
 }));
 
+
 // Search for books in database
-router.get('/books/search/', asyncHandler(async (req, res) => {
+router.get('/books/', asyncHandler(async (req, res) => {
   const searchQuery = req.query.search;
+  console.log(req.params)
   let books;
 
   if (/\d+/.test(searchQuery) === true) {
     books = await Book.findAll({
+                    order: [[ "Title", "ASC" ]],
                     where: {
                       year: {
                         [Op.substring]: searchQuery
@@ -64,6 +69,7 @@ router.get('/books/search/', asyncHandler(async (req, res) => {
                   });
   } else {
     books = await Book.findAll({
+                    order: [[ "Title", "ASC" ]],
                     where: {
                       [Op.or]: [
                         {
@@ -89,18 +95,41 @@ router.get('/books/search/', asyncHandler(async (req, res) => {
   res.render('search', {
     title: 'Search',
     heading: 'Search',
+    totalPage: appendPageLinks(books, 10),
+    searchQuery,
     books
   });
 }));
 
 // Post new book to the database
 router.post('/books/new', asyncHandler(async (req, res) => {
-  const book = await Book.create(req.body);
-  res.redirect('/books/page/1');
+  const bookAttrs = await Book.rawAttributes
+  let book;
+
+  try {
+    book = await Book.create(req.body);
+    res.redirect('/books/page/1');
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
+      const errorMessage = [];
+      error.errors.forEach(error => errorMessage.push(error.message));
+
+      res.render('new-book', {
+        title: 'Error Adding New Book',
+        heading: 'New Book',
+        buttonValue: 'Create New Book',
+        returnButton: true,
+        errorMessage,
+        bookAttrs
+      });
+    } else {
+      throw error;
+    }
+  }
 }));
 
 router.get('/books/:id', asyncHandler(async (req, res) => {
-  const bookAttrs = await Book.rawAttributes
+  const bookAttrs = await Book.rawAttributes;
   const book = await Book.findByPk(req.params.id);
   res.render('update-book', {
     title: 'Update Book',
@@ -115,9 +144,29 @@ router.get('/books/:id', asyncHandler(async (req, res) => {
 
 // Update book in the database
 router.post('/books/:id', asyncHandler(async (req, res) => {
+  const bookAttrs = await Book.rawAttributes;
   const book = await Book.findByPk(req.params.id);
-  await book.update(req.body);
-  res.redirect('/books/page/1');
+
+  try {
+    await book.update(req.body);
+    res.redirect('/books/page/1');
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
+      const errorMessage = [];
+      error.errors.forEach(error => errorMessage.push(error.message));
+
+      res.render('update-book', {
+        title: 'Update Book',
+        heading: 'Update Book',
+        buttonValue: 'Update Book',
+        returnButton: false,
+        value: true,
+        errorMessage,
+        bookAttrs,
+        book
+      });
+    }
+  }
 }));
 
 // Delete book in the database

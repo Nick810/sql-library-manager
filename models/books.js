@@ -24,7 +24,6 @@ module.exports = (sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notNull: {
           msg: 'Please provide a value for "author"'
         },
@@ -37,11 +36,7 @@ module.exports = (sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notNull: {
-          msg: 'Please provide a value for "genre"'
-        },
-        notEmpty: {
           msg: 'Please provide a value for "genre"'
         }
       }
@@ -50,13 +45,9 @@ module.exports = (sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
       validate: {
-        isInt: true,
-        len: {
-          args: 4,
-        },
         notNull: {
           msg: 'Please provide a value for "year"'
-        },
+        }
       }
     }
   }, { sequelize });

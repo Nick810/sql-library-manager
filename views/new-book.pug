@@ -1,6 +1,11 @@
 extends layout.pug
 
 block content
+  if errorMessage
+    h2.error Opps! Something is wrong.
+    each error in errorMessage
+      p.error= error
+    
   form(action='/books/new' method='post') 
     include form
     
