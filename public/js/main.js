@@ -1,5 +1,5 @@
 window.onload = () => {
-  if (document.querySelectorAll('.pagination-links').length > 1) {
+  if (document.querySelectorAll('.pagination-links').length > 0) {
     const pathName = window.location.pathname;
     const paginationLinks = document.querySelectorAll('.pagination-links');
     let slicedPath = pathName.slice(pathName.indexOf('/page/') + 6, pathName.length);
