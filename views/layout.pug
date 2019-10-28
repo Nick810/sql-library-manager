@@ -11,7 +11,7 @@ html(lang='en')
       .header-container
         h1= heading
         .search-container
-          form(action='/books/')
+          form(action='/books/find/page/1/')
             input(type="search" for="search" name="search" placeholder="title, author, etc...")
             input(type='submit' id='search')
       block content

@@ -26,6 +26,6 @@ block content
   - let index = 1;
   div.pagination-container
     while index < totalPage + 1
-        a(href='/books/?search=' + searchQuery).pagination-links= index++
+        a(href='/books/find/page/' + index + '/?search=' + searchQuery).pagination-links= index++
   p
     a(class='button table-button' href='/') Home

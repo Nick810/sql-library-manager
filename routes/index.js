@@ -61,12 +61,16 @@ router.get('/books/new', asyncHandler(async (req, res) => {
 }));
 
 // Search for books in the database
-router.get('/books/', asyncHandler(async (req, res) => {
+router.get('/books/find/page/:id', asyncHandler(async (req, res) => {
   const searchQuery = req.query.search;
+  let allBooks;
   let books;
 
   if (/\d+/.test(searchQuery) === true) {
+    allBooks = await Book.findAll({ where: { year: { [Op.substring]: searchQuery } } });
     books = await Book.findAll({
+                    offset: (req.params.id - 1) * 10,
+                    limit: 10,
                     order: [[ "Title", "ASC" ]],
                     where: {
                       year: {
@@ -75,7 +79,28 @@ router.get('/books/', asyncHandler(async (req, res) => {
                     }
                   });
   } else {
+    allBooks = await Book.findAll({ where: { [Op.or]: [
+                        {
+                          title: {
+                            [Op.substring]: searchQuery
+                          }
+                        },
+                        {
+                          author: {
+                            [Op.substring]: searchQuery
+                          }
+                        },
+                        {
+                          genre: {
+                            [Op.substring]: searchQuery
+                          }
+                        },
+                      ]
+                    }
+                  });
     books = await Book.findAll({
+                    offset: (req.params.id - 1) * 10,
+                    limit: 10,
                     order: [[ "Title", "ASC" ]],
                     where: {
                       [Op.or]: [
@@ -102,7 +127,7 @@ router.get('/books/', asyncHandler(async (req, res) => {
   res.render('search', {
     title: 'Search',
     heading: 'Search',
-    // totalPage: appendPageLinks(books, 10),
+    totalPage: appendPageLinks(allBooks, 10),
     searchQuery,
     books
   });
